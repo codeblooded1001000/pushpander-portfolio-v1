@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv /Users/princetanwar/Documents/projects/pushpander-portfolio-v1/portfolio.html /tmp/portfolio.html)",
+      "Bash(npx create-next-app@14 /Users/princetanwar/Documents/projects/pushpander-portfolio-v1 --typescript --tailwind --eslint --app --src-dir=false --import-alias=\"@/*\" --no-git)"
+    ]
+  }
+}

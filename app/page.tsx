@@ -1,101 +1,102 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useCallback, useRef } from "react";
+import Nav from "@/components/Nav";
+import Hero from "@/components/sections/Hero";
+import Projects from "@/components/sections/Projects";
+import Experience from "@/components/sections/Experience";
+import Incidents from "@/components/sections/Incidents";
+import Testimonials from "@/components/sections/Testimonials";
+import Skills from "@/components/sections/Skills";
+import Contact from "@/components/sections/Contact";
+import Blog from "@/components/sections/Blog";
+import Footer from "@/components/sections/Footer";
+import ParkourOverlay from "@/components/effects/ParkourOverlay";
+import EasterEggListener from "@/components/effects/EasterEggListener";
+import RankUpToast from "@/components/effects/RankUpToast";
+import { useSchruteBucks } from "@/hooks/useSchruteBucks";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { total, rank, earn, earnEvents, rankUp } = useSchruteBucks();
+  const [parkourActive, setParkourActive] = useState(false);
+  const parkourCooldownRef = useRef(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  // Stanley click counter
+  const [, setStanleyClicks] = useState(0);
+  const [stanleyBubble, setStanleyBubble] = useState<string | null>(null);
+
+  // Mobile parkour: 5 rapid taps on Michael
+  const tapTimesRef = useRef<number[]>([]);
+
+  const handleParkour = useCallback(() => {
+    if (parkourActive || parkourCooldownRef.current) return;
+    setParkourActive(true);
+  }, [parkourActive]);
+
+  const handleParkourComplete = useCallback(() => {
+    setParkourActive(false);
+    parkourCooldownRef.current = true;
+    setTimeout(() => {
+      parkourCooldownRef.current = false;
+    }, 10000);
+  }, []);
+
+  const handleStanleyClick = useCallback(() => {
+    setStanleyClicks((prev) => {
+      const next = prev + 1;
+      if (next === 5) {
+        setStanleyBubble("Did I stutter?");
+        earn(10, "stanley-5");
+        setTimeout(() => setStanleyBubble(null), 2500);
+      } else if (next === 10) {
+        setStanleyBubble("I have been here for 18 years. Leave me alone.");
+        earn(20, "stanley-10");
+        setTimeout(() => setStanleyBubble(null), 2500);
+      } else if (next === 20) {
+        setStanleyBubble("Pretzel Day.");
+        earn(50, "stanley-20");
+        document.body.style.filter = "sepia(0.6)";
+        setTimeout(() => {
+          setStanleyBubble(null);
+          document.body.style.filter = "";
+        }, 3000);
+      }
+      return next;
+    });
+  }, [earn]);
+
+  const handleMichaelTap = useCallback(() => {
+    const now = Date.now();
+    tapTimesRef.current = [...tapTimesRef.current.filter((t) => now - t < 1500), now];
+    if (tapTimesRef.current.length >= 5) {
+      tapTimesRef.current = [];
+      handleParkour();
+    }
+  }, [handleParkour]);
+
+  return (
+    <>
+      <Nav total={total} rank={rank} earnEvents={earnEvents} />
+
+      <Hero onMichaelTap={handleMichaelTap} />
+
+      <Projects earn={earn} />
+      <Experience earn={earn} />
+      <Incidents earn={earn} />
+      <Testimonials
+        earn={earn}
+        onStanleyClick={handleStanleyClick}
+        stanleyBubble={stanleyBubble}
+      />
+      <Skills earn={earn} />
+      <Contact earn={earn} />
+      <Blog earn={earn} />
+      <Footer />
+
+      <ParkourOverlay active={parkourActive} onComplete={handleParkourComplete} />
+      <EasterEggListener earn={earn} onParkour={handleParkour} />
+      <RankUpToast rank={rankUp} />
+
+    </>
   );
 }

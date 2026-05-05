@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pushpander Singh — Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5E6D3;
+    --cream-dark: #E8D5BC;
+    --paper: #FAF1E0;
+    --navy: #1B3A5C;
+    --navy-dark: #0F2540;
+    --red: #C8443D;
+    --red-dark: #A33530;
+    --beige: #C9B596;
+    --brown: #6B4E32;
+    --olive: #7A8450;
+    --mustard: #D4A93C;
+    --shadow: rgba(15, 37, 64, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  body {
+    background: var(--cream);
+    color: var(--navy);
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><rect x='2' y='2' width='4' height='4' fill='%231B3A5C'/><rect x='6' y='2' width='4' height='4' fill='%231B3A5C'/><rect x='2' y='6' width='4' height='4' fill='%231B3A5C'/><rect x='6' y='6' width='4' height='12' fill='%231B3A5C'/><rect x='10' y='6' width='4' height='4' fill='%231B3A5C'/></svg>") 4 4, auto;
+  }
+
+  /* CRT scanlines overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(15, 37, 64, 0.03) 0px,
+      rgba(15, 37, 64, 0.03) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Paper grain texture */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.31 0 0 0 0 0.2 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.6;
+  }
+
+  h1, h2, h3, .pixel-font {
+    font-family: 'Press Start 2P', monospace;
+    letter-spacing: 1px;
+    line-height: 1.6;
+  }
+
+  .typewriter {
+    font-family: 'Special Elite', monospace;
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: var(--navy);
+    border-bottom: 4px solid var(--navy-dark);
+    z-index: 100;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mug {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+
+  nav ul a {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--cream);
+    text-decoration: none;
+    padding: 6px 10px;
+    border: 2px solid transparent;
+    transition: all 0.1s steps(1);
+  }
+
+  nav ul a:hover {
+    background: var(--red);
+    border: 2px solid var(--cream);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--navy-dark);
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 32px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .hero::before {
+    content: 'BEARS · BEETS · BACKEND SYSTEMS';
+    position: absolute;
+    top: 90px;
+    left: 32px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--red);
+    letter-spacing: 2px;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 24px;
+    text-shadow: 4px 4px 0 var(--red);
+  }
+
+  .hero-text .tagline {
+    font-size: 24px;
+    color: var(--brown);
+    margin-bottom: 16px;
+    font-family: 'Special Elite', monospace;
+  }
+
+  .hero-text .blurb {
+    font-size: 22px;
+    color: var(--navy-dark);
+    margin-bottom: 32px;
+    max-width: 480px;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 14px 20px;
+    text-decoration: none;
+    border: 3px solid var(--navy-dark);
+    background: var(--cream);
+    color: var(--navy-dark);
+    box-shadow: 4px 4px 0 var(--navy-dark);
+    transition: all 0.1s steps(1);
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--navy-dark);
+  }
+
+  .btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--navy-dark);
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--cream);
+    border-color: var(--red-dark);
+    box-shadow: 4px 4px 0 var(--red-dark);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 2px 2px 0 var(--red-dark);
+  }
+
+  /* Hero scene — Michael in his office */
+  .hero-scene {
+    position: relative;
+    height: 480px;
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 8px 8px 0 var(--navy-dark);
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .scene-floor {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 30%;
+    background: var(--beige);
+    border-top: 4px solid var(--brown);
+  }
+
+  .scene-floor::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 47px, var(--brown) 47px 48px),
+      repeating-linear-gradient(0deg, transparent 0 23px, var(--brown) 23px 24px);
+    opacity: 0.3;
+  }
+
+  .scene-wall {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 70%;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--cream-dark) 100%);
+  }
+
+  .scene-window {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    width: 100px;
+    height: 80px;
+    background: linear-gradient(180deg, #87B5D9 0%, #C8DDED 100%);
+    border: 4px solid var(--brown);
+    box-shadow: inset 0 0 0 2px var(--paper);
+  }
+
+  .scene-window::before, .scene-window::after {
+    content: '';
+    position: absolute;
+    background: var(--brown);
+  }
+
+  .scene-window::before {
+    left: 50%; top: 0; bottom: 0; width: 4px; transform: translateX(-50%);
+  }
+
+  .scene-window::after {
+    top: 50%; left: 0; right: 0; height: 4px; transform: translateY(-50%);
+  }
+
+  .desk {
+    position: absolute;
+    bottom: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 80px;
+    background: var(--brown);
+    border: 4px solid var(--navy-dark);
+  }
+
+  .desk::before {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: 10px;
+    width: 20px;
+    height: 40px;
+    background: var(--brown);
+    border: 4px solid var(--navy-dark);
+    border-top: none;
+  }
+
+  .desk::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    right: 10px;
+    width: 20px;
+    height: 40px;
+    background: var(--brown);
+    border: 4px solid var(--navy-dark);
+    border-top: none;
+  }
+
+  .computer {
+    position: absolute;
+    bottom: 28%;
+    left: 50%;
+    transform: translateX(-30%);
+    width: 60px;
+    height: 50px;
+    background: var(--cream-dark);
+    border: 3px solid var(--navy-dark);
+  }
+
+  .computer::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    background: var(--navy);
+    background-image:
+      linear-gradient(0deg, transparent 50%, rgba(255,255,255,0.05) 50%);
+    background-size: 100% 4px;
+  }
+
+  .character {
+    position: absolute;
+    height: 180px;
+    width: auto;
+    animation: bob 2s steps(2) infinite;
+    image-rendering: pixelated;
+  }
+
+  .michael {
+    bottom: 18%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-3px); }
+  }
+
+  /* Sign on wall */
+  .wall-sign {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    background: var(--paper);
+    border: 3px solid var(--navy);
+    padding: 8px 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--navy);
+    transform: rotate(-2deg);
+  }
+
+  /* ============ SECTIONS ============ */
+  section {
+    padding: 80px 32px;
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 48px;
+    border-bottom: 4px dashed var(--navy);
+    padding-bottom: 24px;
+  }
+
+  .section-header svg {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+  }
+
+  .section-header .header-sprite {
+    height: 110px;
+    width: auto;
+    flex-shrink: 0;
+    image-rendering: pixelated;
+  }
+
+  .section-header h2 {
+    font-size: 24px;
+    color: var(--navy);
+  }
+
+  .section-header .meta {
+    font-family: 'Special Elite', monospace;
+    color: var(--brown);
+    font-size: 18px;
+    margin-top: 8px;
+  }
+
+  .stamp {
+    position: absolute;
+    top: 60px;
+    right: 32px;
+    border: 3px solid var(--red);
+    color: var(--red);
+    padding: 8px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    transform: rotate(8deg);
+    opacity: 0.7;
+  }
+
+  /* ============ PROJECTS ============ */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+  }
+
+  .project-card {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 24px;
+    transition: all 0.1s steps(1);
+    position: relative;
+  }
+
+  .project-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--navy-dark);
+  }
+
+  .project-card:hover .project-thumb {
+    background: var(--cream-dark);
+  }
+
+  .project-thumb {
+    height: 160px;
+    background: var(--cream);
+    border: 3px solid var(--navy-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-thumb svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .project-tag {
+    display: inline-block;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    background: var(--navy);
+    color: var(--cream);
+    padding: 4px 8px;
+    margin-bottom: 12px;
+  }
+
+  .project-card h3 {
+    font-size: 16px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .project-card p {
+    font-size: 18px;
+    color: var(--navy-dark);
+    margin-bottom: 16px;
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tech-pill {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    background: var(--cream-dark);
+    border: 2px solid var(--brown);
+    padding: 2px 8px;
+    color: var(--brown);
+  }
+
+  /* ============ EXPERIENCE ============ */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: repeating-linear-gradient(
+      0deg,
+      var(--navy) 0 8px,
+      transparent 8px 14px
+    );
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 24px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -38px;
+    top: 24px;
+    width: 20px;
+    height: 20px;
+    background: var(--red);
+    border: 4px solid var(--navy);
+  }
+
+  .timeline-item h3 {
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .timeline-item .role {
+    font-family: 'Special Elite', monospace;
+    color: var(--red);
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .timeline-item .duration {
+    font-family: 'VT323', monospace;
+    color: var(--brown);
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .timeline-item ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .timeline-item li {
+    padding-left: 24px;
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 18px;
+  }
+
+  .timeline-item li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    top: 4px;
+  }
+
+  /* ============ TESTIMONIALS ============ */
+  .testimonials-row {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .stanley-corner {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 16px;
+    text-align: center;
+    position: sticky;
+    top: 100px;
+  }
+
+  .stanley-corner svg {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 12px;
+  }
+
+  .corner-sprite {
+    height: 160px;
+    width: auto;
+    margin-bottom: 12px;
+    image-rendering: pixelated;
+  }
+
+  .stanley-corner .quote-bubble {
+    font-family: 'Special Elite', monospace;
+    font-size: 16px;
+    color: var(--navy-dark);
+    background: var(--cream-dark);
+    padding: 12px;
+    border: 2px solid var(--brown);
+    position: relative;
+  }
+
+  .testimonial-card {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 24px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .testimonial-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 60px;
+    color: var(--red);
+    background: var(--cream);
+    padding: 0 8px;
+    line-height: 1;
+  }
+
+  .testimonial-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 19px;
+    color: var(--navy-dark);
+    margin-bottom: 16px;
+    margin-top: 12px;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 2px dashed var(--brown);
+    padding-top: 12px;
+  }
+
+  .author-avatar {
+    width: 48px;
+    height: 48px;
+    background: var(--navy);
+    border: 3px solid var(--navy-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .author-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--navy);
+  }
+
+  .author-title {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--brown);
+  }
+
+  /* ============ SKILLS ============ */
+  .skills-wrapper {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .dwight-corner {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .dwight-corner svg {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 8px;
+  }
+
+  .dwight-corner p {
+    font-family: 'Special Elite', monospace;
+    font-size: 15px;
+    color: var(--navy-dark);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .skill-cat {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 20px;
+  }
+
+  .skill-cat h4 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--red);
+    margin-bottom: 12px;
+    border-bottom: 2px solid var(--cream-dark);
+    padding-bottom: 8px;
+  }
+
+  .skill-cat ul {
+    list-style: none;
+  }
+
+  .skill-cat li {
+    padding: 4px 0;
+    font-size: 18px;
+    color: var(--navy-dark);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .skill-cat li::before {
+    content: '◆';
+    color: var(--mustard);
+    margin-right: 8px;
+  }
+
+  /* ============ CONTACT ============ */
+  .contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 8px 8px 0 var(--navy-dark);
+    padding: 40px;
+  }
+
+  .contact-text h3 {
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+
+  .contact-text p {
+    font-family: 'Special Elite', monospace;
+    font-size: 19px;
+    margin-bottom: 24px;
+    color: var(--navy-dark);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-link {
+    background: var(--cream);
+    border: 3px solid var(--navy-dark);
+    padding: 12px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--navy);
+    text-decoration: none;
+    box-shadow: 3px 3px 0 var(--navy-dark);
+    transition: all 0.1s steps(1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .contact-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--navy-dark);
+    background: var(--mustard);
+  }
+
+  .pam-scene {
+    background: var(--cream);
+    border: 3px solid var(--navy-dark);
+    padding: 24px 16px;
+    text-align: center;
+    position: relative;
+  }
+
+  .reception-sign {
+    background: var(--paper);
+    border: 3px solid var(--navy);
+    padding: 8px 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--navy);
+    display: inline-block;
+    margin-bottom: 16px;
+    box-shadow: 3px 3px 0 var(--navy-dark);
+    transform: rotate(-2deg);
+  }
+
+  .pam-sprite {
+    width: 100%;
+    max-width: 240px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    image-rendering: pixelated;
+    animation: bob-static 2s steps(2) infinite;
+  }
+
+  @keyframes bob-static {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  .pam-scene svg {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+  }
+
+  /* ============ BLOG ============ */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .kevin-corner {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    padding: 16px;
+    text-align: center;
+  }
+
+  .kevin-corner svg {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 8px;
+  }
+
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .blog-item {
+    background: var(--paper);
+    border: 4px solid var(--navy);
+    box-shadow: 4px 4px 0 var(--navy-dark);
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.1s steps(1);
+  }
+
+  .blog-item:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--navy-dark);
+    background: var(--cream-dark);
+  }
+
+  .blog-item h4 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+
+  .blog-item .date {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--brown);
+  }
+
+  .blog-item .arrow {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    color: var(--red);
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 40px 32px;
+    text-align: center;
+    margin-top: 80px;
+    border-top: 4px solid var(--navy-dark);
+  }
+
+  footer p {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    line-height: 2;
+  }
+
+  footer .easter {
+    margin-top: 16px;
+    font-family: 'Special Elite', monospace;
+    font-size: 16px;
+    color: var(--beige);
+  }
+
+  /* Idle blink animation for sprites */
+  @keyframes blink {
+    0%, 95%, 100% { opacity: 1; }
+    97% { opacity: 0; }
+  }
+
+  .blink-eye {
+    animation: blink 4s infinite;
+    transform-origin: center;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 100px 20px 40px;
+    }
+    .hero-scene { height: 360px; }
+    .hero-text h1 { font-size: 22px; }
+    nav ul { gap: 8px; }
+    nav ul a { font-size: 7px; padding: 4px 6px; }
+    .logo { font-size: 9px; }
+    .testimonials-row, .skills-wrapper, .blog-grid, .contact-wrapper {
+      grid-template-columns: 1fr;
+    }
+    .stanley-corner { position: static; }
+    section { padding: 60px 20px; }
+    .stamp { font-size: 8px; top: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="logo">
+    <!-- Mini "World's Best Boss" mug -->
+    <svg class="logo-mug" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+      <rect x="3" y="4" width="8" height="9" fill="#F5E6D3"/>
+      <rect x="3" y="4" width="8" height="1" fill="#1B3A5C"/>
+      <rect x="3" y="12" width="8" height="1" fill="#1B3A5C"/>
+      <rect x="3" y="4" width="1" height="9" fill="#1B3A5C"/>
+      <rect x="10" y="4" width="1" height="9" fill="#1B3A5C"/>
+      <rect x="11" y="6" width="2" height="1" fill="#1B3A5C"/>
+      <rect x="13" y="6" width="1" height="4" fill="#1B3A5C"/>
+      <rect x="11" y="10" width="2" height="1" fill="#1B3A5C"/>
+      <rect x="5" y="7" width="4" height="1" fill="#C8443D"/>
+      <rect x="5" y="9" width="4" height="1" fill="#C8443D"/>
+    </svg>
+    PUSHPANDER.EXE
+  </div>
+  <ul>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#testimonials">Praise</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Hire Me</a></li>
+    <li><a href="#blog">Blog</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <h1>HEY, I'M<br>PUSHPANDER.</h1>
+    <p class="tagline">Backend engineer. Distributed systems nerd.<br>Available for freelance & full-time.</p>
+    <p class="blurb">I build scalable APIs and event-driven backends. Currently leading engineering at an EV leasing startup, shipping side projects, and helping teams move fast without breaking things (mostly).</p>
+    <div class="cta-row">
+      <a href="#projects" class="btn btn-primary">SEE PROJECTS →</a>
+      <a href="#contact" class="btn">HIRE ME</a>
+    </div>
+  </div>
+
+  <div class="hero-scene">
+    <div class="scene-wall"></div>
+    <div class="wall-sign">DUNDER<br>MIFFLIN</div>
+    <div class="scene-window"></div>
+    <div class="scene-floor"></div>
+
+    <!-- Michael Scott pixel sprite -->
+    <img src="sprites/michael.png" alt="Michael Scott" class="character michael">
+
+    <!-- Speech bubble -->
+    <div style="position:absolute; top: 130px; right: 30px; background: var(--paper); border: 3px solid var(--navy); padding: 10px 14px; font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--navy); max-width: 180px; line-height: 1.6; box-shadow: 4px 4px 0 var(--navy-dark); z-index: 5;">
+      WORLD'S BEST<br>BACKEND ENGINEER.
+      <div style="position:absolute; bottom:-14px; left: 30px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid var(--navy);"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects">
+  <div class="stamp">SHIPPED ✓</div>
+  <div class="section-header">
+    <!-- Jim sprite -->
+    <img src="sprites/jim.png" alt="Jim Halpert" class="header-sprite">
+    <div>
+      <h2>SELECTED PROJECTS</h2>
+      <div class="meta">// stuff that actually shipped to production</div>
+    </div>
+  </div>
+
+  <div class="projects-grid">
+    <!-- Burrow -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect width="200" height="100" fill="#F5E6D3"/>
+          <!-- Building 1 -->
+          <rect x="20" y="30" width="40" height="60" fill="#1B3A5C"/>
+          <rect x="25" y="38" width="6" height="6" fill="#D4A93C"/>
+          <rect x="35" y="38" width="6" height="6" fill="#D4A93C"/>
+          <rect x="45" y="38" width="6" height="6" fill="#D4A93C" class="blink-eye"/>
+          <rect x="25" y="50" width="6" height="6" fill="#D4A93C"/>
+          <rect x="35" y="50" width="6" height="6" fill="#1B1B2A"/>
+          <rect x="45" y="50" width="6" height="6" fill="#D4A93C"/>
+          <rect x="25" y="62" width="6" height="6" fill="#1B1B2A"/>
+          <rect x="35" y="62" width="6" height="6" fill="#D4A93C"/>
+          <rect x="45" y="62" width="6" height="6" fill="#D4A93C"/>
+          <rect x="25" y="74" width="26" height="16" fill="#C8443D"/>
+          <!-- Building 2 -->
+          <rect x="80" y="20" width="50" height="70" fill="#6B4E32"/>
+          <rect x="85" y="28" width="8" height="6" fill="#D4A93C"/>
+          <rect x="98" y="28" width="8" height="6" fill="#D4A93C"/>
+          <rect x="111" y="28" width="8" height="6" fill="#D4A93C"/>
+          <rect x="85" y="42" width="8" height="6" fill="#D4A93C" class="blink-eye"/>
+          <rect x="98" y="42" width="8" height="6" fill="#1B1B2A"/>
+          <rect x="111" y="42" width="8" height="6" fill="#D4A93C"/>
+          <rect x="85" y="56" width="8" height="6" fill="#D4A93C"/>
+          <rect x="98" y="56" width="8" height="6" fill="#D4A93C"/>
+          <rect x="111" y="56" width="8" height="6" fill="#1B1B2A"/>
+          <rect x="95" y="70" width="20" height="20" fill="#1B3A5C"/>
+          <!-- Building 3 -->
+          <rect x="145" y="40" width="35" height="50" fill="#7A8450"/>
+          <rect x="150" y="48" width="6" height="6" fill="#D4A93C"/>
+          <rect x="160" y="48" width="6" height="6" fill="#D4A93C"/>
+          <rect x="170" y="48" width="6" height="6" fill="#1B1B2A"/>
+          <rect x="150" y="60" width="6" height="6" fill="#D4A93C"/>
+          <rect x="160" y="60" width="6" height="6" fill="#D4A93C" class="blink-eye"/>
+          <rect x="170" y="60" width="6" height="6" fill="#D4A93C"/>
+          <!-- Pin/marker -->
+          <circle cx="100" cy="15" r="6" fill="#C8443D"/>
+          <rect x="98" y="13" width="4" height="4" fill="#F5E6D3"/>
+        </svg>
+      </div>
+      <span class="project-tag">IN PROGRESS</span>
+      <h3>Burrow</h3>
+      <p>Corporate-verified flatmate finder for Gurgaon. Trust-first model — verify your work email, then list or browse.</p>
+      <div class="tech-pills">
+        <span class="tech-pill">NestJS</span>
+        <span class="tech-pill">Next.js 14</span>
+        <span class="tech-pill">Postgres</span>
+        <span class="tech-pill">Redis</span>
+        <span class="tech-pill">R2</span>
+      </div>
+    </div>
+
+    <!-- SafeDate -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect width="200" height="100" fill="#1B3A5C"/>
+          <!-- Stars -->
+          <rect x="20" y="15" width="2" height="2" fill="#F5E6D3"/>
+          <rect x="40" y="25" width="2" height="2" fill="#F5E6D3"/>
+          <rect x="160" y="20" width="2" height="2" fill="#F5E6D3"/>
+          <rect x="180" y="35" width="2" height="2" fill="#F5E6D3"/>
+          <rect x="60" y="10" width="2" height="2" fill="#F5E6D3"/>
+          <!-- Big heart -->
+          <rect x="80" y="30" width="10" height="6" fill="#C8443D"/>
+          <rect x="110" y="30" width="10" height="6" fill="#C8443D"/>
+          <rect x="76" y="36" width="48" height="6" fill="#C8443D"/>
+          <rect x="76" y="42" width="48" height="6" fill="#C8443D"/>
+          <rect x="80" y="48" width="40" height="6" fill="#C8443D"/>
+          <rect x="84" y="54" width="32" height="6" fill="#C8443D"/>
+          <rect x="88" y="60" width="24" height="6" fill="#C8443D"/>
+          <rect x="92" y="66" width="16" height="6" fill="#C8443D"/>
+          <rect x="96" y="72" width="8" height="4" fill="#C8443D"/>
+          <!-- Shield -->
+          <rect x="92" y="40" width="16" height="6" fill="#F5E6D3"/>
+          <rect x="94" y="46" width="12" height="4" fill="#F5E6D3"/>
+          <rect x="96" y="50" width="8" height="3" fill="#F5E6D3"/>
+          <rect x="98" y="42" width="2" height="6" fill="#1B3A5C"/>
+          <rect x="100" y="42" width="2" height="6" fill="#1B3A5C"/>
+        </svg>
+      </div>
+      <span class="project-tag">LAUNCHED</span>
+      <h3>SafeDate</h3>
+      <p>Date planning + safety app for Indian metros. Verified venues, check-in nudges, zero-cost data pipeline (OSM + Foursquare + Unsplash).</p>
+      <div class="tech-pills">
+        <span class="tech-pill">Next.js</span>
+        <span class="tech-pill">Postgres</span>
+        <span class="tech-pill">Cron</span>
+        <span class="tech-pill">OSM API</span>
+      </div>
+    </div>
+
+    <!-- GMS -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect width="200" height="100" fill="#C9B596"/>
+          <!-- Garage building -->
+          <rect x="30" y="30" width="140" height="60" fill="#6B4E32"/>
+          <!-- Roof -->
+          <rect x="20" y="22" width="160" height="8" fill="#1B3A5C"/>
+          <rect x="25" y="18" width="150" height="4" fill="#1B3A5C"/>
+          <!-- Garage door (panels) -->
+          <rect x="50" y="40" width="40" height="50" fill="#1B3A5C"/>
+          <rect x="52" y="42" width="36" height="10" fill="#3A5878"/>
+          <rect x="52" y="54" width="36" height="10" fill="#3A5878"/>
+          <rect x="52" y="66" width="36" height="10" fill="#3A5878"/>
+          <rect x="52" y="78" width="36" height="10" fill="#3A5878"/>
+          <!-- Tools -->
+          <rect x="110" y="50" width="6" height="20" fill="#1B1B2A"/>
+          <rect x="106" y="48" width="14" height="4" fill="#C8443D"/>
+          <!-- Bike sprite -->
+          <circle cx="135" cy="78" r="6" fill="#1B1B2A"/>
+          <circle cx="155" cy="78" r="6" fill="#1B1B2A"/>
+          <rect x="135" y="68" width="20" height="6" fill="#7A8450"/>
+          <rect x="140" y="62" width="8" height="6" fill="#7A8450"/>
+          <!-- Sign -->
+          <rect x="80" y="6" width="40" height="12" fill="#F5E6D3"/>
+          <rect x="84" y="9" width="2" height="6" fill="#1B3A5C"/>
+          <rect x="88" y="9" width="2" height="6" fill="#1B3A5C"/>
+          <rect x="92" y="9" width="2" height="6" fill="#1B3A5C"/>
+          <rect x="96" y="9" width="2" height="6" fill="#1B3A5C"/>
+        </svg>
+      </div>
+      <span class="project-tag">ALT MOBILITY</span>
+      <h3>Garage Management System</h3>
+      <p>End-to-end GMS for an EV leasing fleet. Inventory verification SOP, state machines, phased rollout. Designed to scale across 12+ cities.</p>
+      <div class="tech-pills">
+        <span class="tech-pill">NestJS</span>
+        <span class="tech-pill">Prisma</span>
+        <span class="tech-pill">Postgres</span>
+        <span class="tech-pill">RabbitMQ</span>
+      </div>
+    </div>
+
+    <!-- Loan Origination -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+          <rect width="200" height="100" fill="#F5E6D3"/>
+          <!-- Document stack -->
+          <rect x="40" y="20" width="80" height="70" fill="#FAF1E0"/>
+          <rect x="40" y="20" width="80" height="2" fill="#1B3A5C"/>
+          <rect x="40" y="88" width="80" height="2" fill="#1B3A5C"/>
+          <rect x="40" y="20" width="2" height="70" fill="#1B3A5C"/>
+          <rect x="118" y="20" width="2" height="70" fill="#1B3A5C"/>
+          <!-- Lines on doc -->
+          <rect x="48" y="30" width="40" height="2" fill="#6B4E32"/>
+          <rect x="48" y="38" width="60" height="2" fill="#6B4E32"/>
+          <rect x="48" y="46" width="50" height="2" fill="#6B4E32"/>
+          <rect x="48" y="54" width="55" height="2" fill="#6B4E32"/>
+          <rect x="48" y="62" width="40" height="2" fill="#6B4E32"/>
+          <!-- Stamp -->
+          <rect x="80" y="68" width="32" height="16" fill="none" stroke="#C8443D" stroke-width="2"/>
+          <rect x="84" y="74" width="2" height="2" fill="#C8443D"/>
+          <rect x="88" y="74" width="2" height="2" fill="#C8443D"/>
+          <rect x="92" y="74" width="2" height="2" fill="#C8443D"/>
+          <rect x="96" y="74" width="2" height="2" fill="#C8443D"/>
+          <rect x="100" y="74" width="2" height="2" fill="#C8443D"/>
+          <rect x="104" y="74" width="2" height="2" fill="#C8443D"/>
+          <!-- Coin stack -->
+          <circle cx="150" cy="80" r="8" fill="#D4A93C"/>
+          <circle cx="150" cy="74" r="8" fill="#D4A93C"/>
+          <circle cx="150" cy="68" r="8" fill="#D4A93C"/>
+          <text x="150" y="72" text-anchor="middle" font-family="Press Start 2P" font-size="8" fill="#6B4E32">$</text>
+        </svg>
+      </div>
+      <span class="project-tag">ALT MOBILITY</span>
+      <h3>Loan Origination Module</h3>
+      <p>Internal-only lending platform. Audit, BRD, 10-day delivery plan. Built for ops teams to push 100+ loans/week without spreadsheets.</p>
+      <div class="tech-pills">
+        <span class="tech-pill">NestJS</span>
+        <span class="tech-pill">Postgres</span>
+        <span class="tech-pill">Kafka</span>
+        <span class="tech-pill">TypeScript</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCE ===== -->
+<section id="experience">
+  <div class="section-header">
+    <!-- Briefcase icon -->
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="5" width="12" height="9" fill="#6B4E32"/>
+      <rect x="2" y="5" width="12" height="2" fill="#1B3A5C"/>
+      <rect x="5" y="3" width="6" height="2" fill="#1B3A5C"/>
+      <rect x="6" y="2" width="4" height="1" fill="#1B3A5C"/>
+      <rect x="7" y="9" width="2" height="2" fill="#D4A93C"/>
+    </svg>
+    <div>
+      <h2>WORK HISTORY</h2>
+      <div class="meta">// professionally caffeinated since 2021</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <h3>Alt Mobility</h3>
+      <div class="role">Backend Engineer · Tech Lead</div>
+      <div class="duration">Series B EV Leasing · Gurgaon</div>
+      <ul>
+        <li>Lead a small backend team building distributed systems for fleet ops, leasing, and finance.</li>
+        <li>Designed Garage Management System (inventory SOPs, state machines, multi-city rollout).</li>
+        <li>Architected internal Loan Origination module — went from BRD to production in 10 days.</li>
+        <li>Stack: NestJS, TypeScript, Postgres, Redis, RabbitMQ, Kafka.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <h3>Prodo Technologies</h3>
+      <div class="role">Backend Engineer</div>
+      <div class="duration">Earlier role</div>
+      <ul>
+        <li>Built payment reconciliation pipelines handling multi-PSP edge cases.</li>
+        <li>Designed telemetry ingestion for high-throughput device data.</li>
+        <li>Multi-tenant adapter orchestration + webhook-based integrations across partners.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section id="testimonials">
+  <div class="section-header">
+    <!-- Crossword puzzle icon -->
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="14" height="14" fill="#F5E6D3"/>
+      <rect x="1" y="1" width="14" height="1" fill="#1B3A5C"/>
+      <rect x="1" y="14" width="14" height="1" fill="#1B3A5C"/>
+      <rect x="1" y="1" width="1" height="14" fill="#1B3A5C"/>
+      <rect x="14" y="1" width="1" height="14" fill="#1B3A5C"/>
+      <rect x="3" y="3" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="7" y="3" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="11" y="3" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="3" y="7" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="11" y="7" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="3" y="11" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="7" y="11" width="2" height="2" fill="#1B3A5C"/>
+      <rect x="11" y="11" width="2" height="2" fill="#1B3A5C"/>
+    </svg>
+    <div>
+      <h2>WHAT FOLKS SAY</h2>
+      <div class="meta">// kind words from people I've worked with</div>
+    </div>
+  </div>
+
+  <div class="testimonials-row">
+    <div class="stanley-corner">
+      <!-- Stanley sprite -->
+      <img src="sprites/stanley.png" alt="Stanley Hudson" class="corner-sprite">
+      <div class="quote-bubble">
+        "I have been here for 18 years. He's good. Now leave me alone."<br>— Stanley
+      </div>
+    </div>
+
+    <div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Pushpander has this rare ability to take a fuzzy product spec and turn it into a clean, well-scoped backend in days. He thinks about edge cases the way most engineers think about happy paths.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="author-name">— ENGINEERING LEAD</div>
+            <div class="author-title">Alt Mobility</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="testimonial-text">Reliable, fast, and writes code that doesn't break two sprints later. He pushed back on a bad architectural decision early — saved us months of refactor pain.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">P</div>
+          <div>
+            <div class="author-name">— PRODUCT MANAGER</div>
+            <div class="author-title">Internal Tools</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <p class="testimonial-text">Knows when to ship and when to push back. Half the engineers I know either over-engineer or under-think — Pushpander somehow does neither.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div>
+            <div class="author-name">— SENIOR ENGINEER</div>
+            <div class="author-title">Prodo Technologies</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills">
+  <div class="section-header">
+    <!-- Beet icon -->
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="2" width="2" height="3" fill="#7A8450"/>
+      <rect x="8" y="2" width="2" height="3" fill="#7A8450"/>
+      <rect x="5" y="5" width="6" height="2" fill="#A33530"/>
+      <rect x="4" y="7" width="8" height="4" fill="#A33530"/>
+      <rect x="5" y="11" width="6" height="2" fill="#A33530"/>
+      <rect x="6" y="13" width="4" height="1" fill="#A33530"/>
+      <rect x="7" y="14" width="2" height="1" fill="#A33530"/>
+    </svg>
+    <div>
+      <h2>TECH STACK</h2>
+      <div class="meta">// fact: these tools are the best at what they do</div>
+    </div>
+  </div>
+
+  <div class="skills-wrapper">
+    <div class="dwight-corner">
+      <!-- Dwight sprite -->
+      <img src="sprites/dwight.png" alt="Dwight Schrute" class="corner-sprite">
+      <p>"FACT: These are the only frameworks worth your time."</p>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-cat">
+        <h4>LANGUAGES</h4>
+        <ul>
+          <li>TypeScript</li>
+          <li>JavaScript</li>
+          <li>SQL</li>
+          <li>Python</li>
+        </ul>
+      </div>
+
+      <div class="skill-cat">
+        <h4>BACKEND</h4>
+        <ul>
+          <li>NestJS</li>
+          <li>Node.js</li>
+          <li>Express</li>
+          <li>REST + GraphQL</li>
+        </ul>
+      </div>
+
+      <div class="skill-cat">
+        <h4>DATA</h4>
+        <ul>
+          <li>PostgreSQL</li>
+          <li>Redis</li>
+          <li>Prisma</li>
+          <li>TypeORM</li>
+        </ul>
+      </div>
+
+      <div class="skill-cat">
+        <h4>MESSAGING</h4>
+        <ul>
+          <li>RabbitMQ</li>
+          <li>Kafka</li>
+          <li>BullMQ</li>
+          <li>Webhooks</li>
+        </ul>
+      </div>
+
+      <div class="skill-cat">
+        <h4>INFRA</h4>
+        <ul>
+          <li>Docker</li>
+          <li>AWS</li>
+          <li>Cloudflare</li>
+          <li>Neon</li>
+        </ul>
+      </div>
+
+      <div class="skill-cat">
+        <h4>FRONTEND</h4>
+        <ul>
+          <li>Next.js 14</li>
+          <li>React</li>
+          <li>Tailwind</li>
+          <li>TypeScript</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="section-header">
+    <!-- Phone icon -->
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="2" width="10" height="12" fill="#1B1B2A"/>
+      <rect x="4" y="3" width="8" height="8" fill="#7A8450"/>
+      <rect x="5" y="4" width="6" height="1" fill="#1B1B2A"/>
+      <rect x="5" y="6" width="6" height="1" fill="#1B1B2A"/>
+      <rect x="5" y="8" width="3" height="1" fill="#1B1B2A"/>
+      <rect x="6" y="12" width="4" height="2" fill="#F5E6D3"/>
+    </svg>
+    <div>
+      <h2>HIRE ME</h2>
+      <div class="meta">// dunder mifflin reception is open</div>
+    </div>
+  </div>
+
+  <div class="contact-wrapper">
+    <div class="contact-text">
+      <h3>FREELANCE? FULL-TIME?<br>JUST A CHAT?</h3>
+      <p>Currently open for freelance backend work and exploring SDE2 roles at high-growth Indian consumer tech companies. Drop a line — I read everything.</p>
+      <div class="contact-links">
+        <a href="mailto:hello@example.com" class="contact-link">📧 EMAIL ME</a>
+        <a href="https://linkedin.com" class="contact-link">💼 LINKEDIN</a>
+        <a href="https://github.com" class="contact-link">💾 GITHUB</a>
+        <a href="https://twitter.com" class="contact-link">🐦 TWITTER / X</a>
+      </div>
+    </div>
+
+    <div class="pam-scene">
+      <div class="reception-sign">RECEPTION</div>
+      <!-- Pam sprite -->
+      <img src="sprites/pam.png" alt="Pam Beesly" class="pam-sprite">
+    </div>
+  </div>
+</section>
+
+<!-- ===== BLOG ===== -->
+<section id="blog">
+  <div class="section-header">
+    <!-- Notebook icon -->
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="2" width="10" height="12" fill="#C8443D"/>
+      <rect x="3" y="2" width="10" height="2" fill="#A33530"/>
+      <rect x="5" y="6" width="6" height="1" fill="#F5E6D3"/>
+      <rect x="5" y="9" width="6" height="1" fill="#F5E6D3"/>
+      <rect x="5" y="12" width="4" height="1" fill="#F5E6D3"/>
+    </svg>
+    <div>
+      <h2>WRITING</h2>
+      <div class="meta">// notes from the trenches</div>
+    </div>
+  </div>
+
+  <div class="blog-grid">
+    <div class="kevin-corner">
+      <!-- Kevin sprite -->
+      <img src="sprites/kevin.png" alt="Kevin Malone" class="corner-sprite">
+      <p style="font-family: 'Special Elite', monospace; font-size: 14px; color: var(--navy-dark);">"Why waste time say lot word when few word do trick?"</p>
+    </div>
+
+    <div class="blog-list">
+      <a href="#" class="blog-item">
+        <div>
+          <h4>Distributed Locks Without Tears</h4>
+          <div class="date">▸ Coming soon</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="blog-item">
+        <div>
+          <h4>Why I Picked NestJS Over Spring</h4>
+          <div class="date">▸ Coming soon</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="blog-item">
+        <div>
+          <h4>Building SafeDate For ₹0</h4>
+          <div class="date">▸ Coming soon</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="blog-item">
+        <div>
+          <h4>Reading Engineering Blogs To Pass Interviews</h4>
+          <div class="date">▸ Coming soon</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2026 PUSHPANDER · BUILT WITH ☕ AND TYPESCRIPT</p>
+  <p class="easter">"FACT. I built this." — Dwight Schrute, on this portfolio</p>
+</footer>
+
+<script>
+  // Smooth scroll for nav links
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      const href = link.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  // Konami easter egg — press B for "BEETS"
+  let typed = '';
+  document.addEventListener('keydown', (e) => {
+    typed = (typed + e.key.toLowerCase()).slice(-5);
+    if (typed === 'beets') {
+      document.body.style.filter = 'hue-rotate(20deg) saturate(1.4)';
+      setTimeout(() => document.body.style.filter = '', 2500);
+    }
+  });
+</script>
+
+</body>
+</html>
